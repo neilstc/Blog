@@ -1,3 +1,6 @@
+
+// some custome filter.
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const axios = require("axios");
@@ -9,14 +12,22 @@ app.use(bodyParser.json());
 
 
 
-
-
-
-
-
-app.post("/events", (req, res) => {
-
-    
+app.post("/events", async (req, res) => {
+    const {type, data} = req.body;
+    console.log(type);
+    if(type === "CommentCreated"){
+        const status = data.content.includes("orange")? "rejected" : "approved";  
+        await axios.post("http://localhost:4005/events", {
+            type: "CommentModerated",
+            data: {
+                id: data.id,
+                postId: data.postId,
+                status,
+                content: data.content
+            }
+        });
+        res.status(201).send("k my dude");
+    }
 });
 
 app.listen(4003, (req, res) =>{
