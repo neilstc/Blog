@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: comments-depl
+spec:
+    replicas: 1 # number of pods running the same image.
+    selector: # here we are telling him who to manage 
+        matchLabels:  ## find pod with this label
+            app: comments 
+    template:  # specify the creation 
+        metadata:
+            labels:
+                app: comments 
+        spec:
+            containers:
+                - name: comments
+                  image: neilmichaeli/comments
+                  
+---
+    apiVersion: v1
+    kind: Service
+    metadata:
+        name: comments-srv
+    spec:
+        selector:
+              app: comments
+        ports:
+          - name: comments
+            protocol: TCP
+            port: 4001
+            targetPort: 4001
+    
+    

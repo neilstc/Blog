@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: posts-depl
+spec:
+    replicas: 1 # number of pods running the same image.
+    selector: # here we are telling him who to manage 
+        matchLabels:  ## find pod with this label
+            app: posts 
+    template:  # specify the creation 
+        metadata:
+            labels:
+                app: posts 
+        spec:
+            containers:
+                - name: posts
+                  image: neilmichaeli/posts:0.0.1
+                  
+---
+    apiVersion: v1
+    kind: Service
+    metadata:
+        name: posts-srv
+    spec:
+        selector:
+              app: posts
+        ports:
+          - name: posts
+            protocol: TCP
+            port: 4000
+            targetPort: 4000
+    
+    

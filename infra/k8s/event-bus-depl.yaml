@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: event-bus-depl
+spec:
+    replicas: 1 # number of pods running the same image.
+    selector: # here we are telling him who to manage 
+        matchLabels:  ## find pod with this label
+            app: event-bus 
+    template:  # specify the creation 
+        metadata:
+            labels:
+                app: event-bus 
+        spec:
+            containers: 
+                - name: event-bus
+                  image: neilmichaeli/event-bus
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: event-bus-srv
+spec:
+    selector:
+          app: event-bus
+    ports:
+      - name: event-bus
+        protocol: TCP
+        port: 4005
+        targetPort: 4005
+
