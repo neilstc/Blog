@@ -1,2 +1,2 @@
 # Blog
-Small Microservices Project using custome event bus.
+Microservices Project using node, react and docker.
